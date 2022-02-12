@@ -2,9 +2,9 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"log"
+	"tour/cmd"
 )
 
 type Name string
@@ -24,20 +24,8 @@ func (n *Name) Set(value string) error {
 var name Name
 
 func main() {
-	flag.Parse()
-	args := flag.Args()
-	if len(args) <= 0 {
-		return
+	err := cmd.Execute()
+	if err != nil {
+		log.Fatalf("cmd.Execute err: %v", err)
 	}
-	switch args[0] {
-	case "go":
-		goCmd := flag.NewFlagSet("go", flag.ExitOnError)
-		goCmd.Var(&name, "name", "Go tour")
-		_ = goCmd.Parse(args[1:])
-	case "php":
-		phpCmd := flag.NewFlagSet("php", flag.ExitOnError)
-		phpCmd.Var(&name, "n", "php tour")
-		_ = phpCmd.Parse(args[1:])
-	}
-	log.Printf("name :%s", name)
 }
